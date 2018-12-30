@@ -95,7 +95,7 @@ public static IConsoleBuilder CreateDefaultBuilder()
     var builder = new ConsoleBuilder()
         .ConfigureAppConfiguration((hostingContext, config) =>
         {
-            var environmentName = Environment.GetEnvironmentVariable(AspNetCoreEnvironment);
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
