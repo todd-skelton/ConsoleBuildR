@@ -97,16 +97,16 @@ Make sure the copy to output directory property on your `appsettings.json` is se
 public static IConsoleBuilder CreateDefaultBuilder()
 {
     var builder = new ConsoleBuilder()
-        .ConfigureAppConfiguration((hostingContext, config) =>
+        .ConfigureAppConfiguration((context, config) =>
         {
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                  .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
+                    .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
         })
-        .ConfigureLogging((windowsServiceContext, logging) =>
+        .ConfigureLogging((context, logging) =>
         {
-            logging.AddConfiguration(windowsServiceContext.Configuration.GetSection("Logging"));
+            logging.AddConfiguration(context.Configuration.GetSection("Logging"));
             logging.AddConsole();
         })
         .UseDefaultServiceProvider((context, options) =>
