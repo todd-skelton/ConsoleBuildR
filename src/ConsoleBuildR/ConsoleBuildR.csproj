@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.2.0-beta-201812282041</Version>
+    <Version>2.2.0</Version>
     <Authors>Todd Skelton</Authors>
     <Company>Kloc Limited Company</Company>
     <Description>Upgrade your console application and use the same pattern as .NET Core MVC projects to configure services, logging, and use application settings.</Description>
