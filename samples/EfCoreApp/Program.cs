@@ -14,7 +14,7 @@ namespace EfCoreApp
 
         static IConsole BuildConsoleApplication() =>
             ConsoleBuilder.CreateDefaultBuilder()
-            .ConfigureServices((config, services) =>
+            .ConfigureServices(services =>
             {
                 services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("ApplicationDb"));
             })
