@@ -19,7 +19,7 @@ namespace ConsoleBuildR
 
         private IConfiguration _config;
         private ConsoleBuilderContext _context;
-        private bool _webHostBuilt;
+        private bool _consoleBuilt;
         private List<Action<ConsoleBuilderContext, IConfigurationBuilder>> _configureAppConfigurationBuilderDelegates;
 
         /// <summary>
@@ -119,17 +119,17 @@ namespace ConsoleBuildR
         /// </summary>
         public IConsole Build()
         {
-            if (_webHostBuilt)
+            if (_consoleBuilt)
             {
                 throw new InvalidOperationException("This console application has already been built.");
             }
-            _webHostBuilt = true;
+            _consoleBuilt = true;
 
             var services = BuildCommonServices();
             var applicationServices = services.Clone();
-            var hostingServiceProvider = GetProviderFromFactory(services);
+            var consoleServiceProvider = GetProviderFromFactory(services);
 
-            var service = new ConsoleApplication(applicationServices, hostingServiceProvider, _config);
+            var service = new ConsoleApplication(applicationServices, consoleServiceProvider, _config);
 
             try
             {
