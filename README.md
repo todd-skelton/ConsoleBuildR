@@ -18,71 +18,35 @@ Add using statement to your application.
 Start by implementing the `IExcutable` interface with the code you want to run.
 
 ```csharp
-    public class MyProgram : IExecutable
+public class MyProgram : IExecutable
+{
+    public Task Execute(string[] args)
     {
-        public Task Execute(string[] args)
-        {
-			Console.WriteLine("Hello World!");
-
-			return Task.CompletedTask;
-        }
+		Console.WriteLine("Hello World!");
+		
+		return Task.CompletedTask;
     }
+}
 ```
 
 Then, change your `Program.cs` file to look like this:
 
 ```csharp
-    class Program
+class Program
+{
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            BuildConsoleApplication().Run(args);
-        }   
+        BuildConsoleApplication().Run(args);
+    }   
 
-        static IConsole BuildConsoleApplication() =>
-            ConsoleBuilder.CreateDefaultBuilder()
-            .Execute<MyProgram>()
-            .Build();
-    }
+    static IConsole BuildConsoleApplication() =>
+        ConsoleBuilder.CreateDefaultBuilder()
+        .Execute<MyProgram>()
+        .Build();
+}
 ```
 
 The `Execute<MyProgram>()` method is how you tell the application builder what `IExcutable` implementations you want to run. You can chain multiple implementations to do different tasks. Call `Run(args)` to run in series or `RunAsync(args)` to run in parallel.
-
-## Console Builder
-
-`ConsoleBuilder.CreateDefaultBuilder()` will create a default implementation that has Microsoft's console logging, and use appsettings.json for configuration. The full method looks like this:
-
-```csharp
-    public static IConsoleBuilder CreateDefaultBuilder()
-    {
-        var builder = new ConsoleBuilder()
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                var projectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
-                var environmentName = Environment.GetEnvironmentVariable(AspNetCoreEnvironment);
-
-                config
-                    .SetBasePath(projectPath)
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables();
-            })
-            .ConfigureLogging((windowsServiceContext, logging) =>
-            {
-                logging.AddConfiguration(windowsServiceContext.Configuration.GetSection("Logging"));
-                logging.AddConsole();
-            })
-            .UseDefaultServiceProvider((context, options) =>
-            {
-                options.ValidateScopes = false;
-            });
-
-        return builder;
-    }
-```
-
-You can create your own configuration using the `new ConsoleBuilder()` if you require customizations.
 
 ## Dependency Injection
 
@@ -91,101 +55,137 @@ Configuring implementations for dependency injection is simple using the `Config
 Here's how you would register an Entity Framework Core `DbContext` for your console application.
 
 ```csharp
-    static IConsole BuildConsoleApplication() =>
-        ConsoleBuilder.CreateDefaultBuilder()
-        .ConfigureServices((config, services) =>
-        {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("ApplicationDb"));
-        })
-        .Execute<MyProgram>()
-        .Build();
+static IConsole BuildConsoleApplication() =>
+    ConsoleBuilder.CreateDefaultBuilder()
+    .ConfigureServices((config, services) =>
+    {
+        services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("ApplicationDb"));
+    })
+    .Execute<MyProgram>()
+    .Build();
 ```
 
 Now you can inject it into your `IExcutable`
 
 ```csharp
-	public class MyProgram : IExecutable
+public class MyProgram : IExecutable
+{
+	private readonly ApplicationDbContext _applicationDbContext;
+
+	public MyProgram(ApplicationDbContext applicationDbContext)
 	{
-		private readonly ApplicationDbContext _applicationDbContext;
-
-		public MyProgram(ApplicationDbContext applicationDbContext)
-		{
-			_applicationDbContext = applicationDbContext;
-		}
-
-		public async Task Execute(string[] args)
-		{
-			// do something with your db
-			await _applicationDbContext.SaveChangesAsync();
-		}
+		_applicationDbContext = applicationDbContext;
 	}
+
+	public async Task Execute(string[] args)
+	{
+		// do something with your db
+		await _applicationDbContext.SaveChangesAsync();
+	}
+}
 ```
+
+## Console Builder
+
+`ConsoleBuilder.CreateDefaultBuilder()` will create a default implementation that has Microsoft's console logging, and use appsettings.json for configuration. The full method looks like this:
+
+```csharp
+public static IConsoleBuilder CreateDefaultBuilder()
+{
+    var builder = new ConsoleBuilder()
+        .ConfigureAppConfiguration((hostingContext, config) =>
+        {
+            var projectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+            var environmentName = Environment.GetEnvironmentVariable(AspNetCoreEnvironment);
+
+            config
+                .SetBasePath(projectPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+        })
+        .ConfigureLogging((windowsServiceContext, logging) =>
+        {
+            logging.AddConfiguration(windowsServiceContext.Configuration.GetSection("Logging"));
+            logging.AddConsole();
+        })
+        .UseDefaultServiceProvider((context, options) =>
+        {
+            options.ValidateScopes = false;
+        });
+
+    return builder;
+}
+```
+
+You can create your own configuration using the `new ConsoleBuilder()` if you require customizations.
 
 ## Sample
 ```csharp
-    class Program
+class Program
+{
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            var app = BuildConsoleApplication();
+        var app = BuildConsoleApplication();
 
-            Console.WriteLine("Running executables in order.");
-            app.Run(args);
+        Console.WriteLine("Running executables in order.");
+        app.Run(args);
 
-            Thread.Sleep(200);
+        Thread.Sleep(200);
 
-            Console.WriteLine("Running executables in parallel.");
-            app.RunAsync(args).GetAwaiter().GetResult();
+        Console.WriteLine("Running executables in parallel.");
+        app.RunAsync(args).GetAwaiter().GetResult();
 
-            Thread.Sleep(200);
-        }   
+        Thread.Sleep(200);
+    }   
 
-        static IConsole BuildConsoleApplication() =>
-            ConsoleBuilder.CreateDefaultBuilder()
-            .Execute<Executable1>()
-            .Execute<Executable2>()
-            .Build();
+    static IConsole BuildConsoleApplication() =>
+        ConsoleBuilder.CreateDefaultBuilder()
+        .Execute<Executable1>()
+        .Execute<Executable2>()
+        .Build();
+}
+
+public class Executable1 : IExecutable
+{
+    private readonly ILogger _logger;
+    private readonly IConfiguration _configuration;
+
+    public Executable1(ILogger<Executable1> logger, IConfiguration configuration)
+    {
+        _logger = logger;
+        _configuration = configuration;
     }
 
-    public class Executable1 : IExecutable
+    public Task Execute(string[] args)
     {
-        private readonly ILogger _logger;
-        private readonly IConfiguration _configuration;
+        Thread.Sleep(100);
 
-        public Executable1(ILogger<Executable1> logger, IConfiguration configuration)
-        {
-            _logger = logger;
-            _configuration = configuration;
-        }
+        _logger.LogInformation(_configuration.GetValue<string>("Message"));
 
-        public Task Execute(string[] args)
-        {
-            Thread.Sleep(100);
+        return Task.CompletedTask;
+    }
+}
 
-            _logger.LogInformation(_configuration.GetValue<string>("Message"));
+public class Executable2 : IExecutable
+{
+    private readonly ILogger _logger;
+    private readonly IConfiguration _configuration;
 
-            return Task.CompletedTask;
-        }
+    public Executable2(ILogger<Executable2> logger, IConfiguration configuration)
+    {
+        _logger = logger;
+        _configuration = configuration;
     }
 
-    public class Executable2 : IExecutable
+    public Task Execute(string[] args)
     {
-        private readonly ILogger _logger;
-        private readonly IConfiguration _configuration;
+        Thread.Sleep(50);
 
-        public Executable2(ILogger<Executable2> logger, IConfiguration configuration)
-        {
-            _logger = logger;
-            _configuration = configuration;
-        }
+        _logger.LogInformation(_configuration.GetValue<string>("Message"));
 
-        public Task Execute(string[] args)
-        {
-            Thread.Sleep(50);
-
-            _logger.LogInformation(_configuration.GetValue<string>("Message"));
-
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
+}
 ```
