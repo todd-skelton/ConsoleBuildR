@@ -1,6 +1,126 @@
 # ConsoleBuildR
 Upgrade your console application and use the same pattern as .NET Core MVC projects to configure services, logging, and use application settings.
 
+## Installation
+
+### NuGet Package Manager
+`Install-Package ConsoleBuildR`
+
+### .NET CLI
+`dotnet add package ConsoleBuildR`
+
+## Usage
+
+Add using statement to your application.
+
+`using ConsoleBuildR;`
+
+Start by implementing the `IExcutable` interface with the code you want to run.
+
+```csharp
+    public class MyProgram : IExecutable
+    {
+        public Task Execute(string[] args)
+        {
+			Console.WriteLine("Hello World!");
+
+			return Task.CompletedTask;
+        }
+    }
+```
+
+Then, change your `Program.cs` file to look like this:
+
+```csharp
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            BuildConsoleApplication().Run(args);
+        }   
+
+        static IConsole BuildConsoleApplication() =>
+            ConsoleBuilder.CreateDefaultBuilder()
+            .Execute<MyProgram>()
+            .Build();
+    }
+```
+
+The `Execute<MyProgram>()` method is how you tell the application builder what `IExcutable` implementations you want to run. You can chain multiple implementations to do different tasks. Call `Run(args)` to run in series or `RunAsync(args)` to run in parallel.
+
+## Console Builder
+
+`ConsoleBuilder.CreateDefaultBuilder()` will create a default implementation that has Microsoft's console logging, and use appsettings.json for configuration. The full method looks like this:
+
+```csharp
+    public static IConsoleBuilder CreateDefaultBuilder()
+    {
+        var builder = new ConsoleBuilder()
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                var projectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+                var environmentName = Environment.GetEnvironmentVariable(AspNetCoreEnvironment);
+
+                config
+                    .SetBasePath(projectPath)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables();
+            })
+            .ConfigureLogging((windowsServiceContext, logging) =>
+            {
+                logging.AddConfiguration(windowsServiceContext.Configuration.GetSection("Logging"));
+                logging.AddConsole();
+            })
+            .UseDefaultServiceProvider((context, options) =>
+            {
+                options.ValidateScopes = false;
+            });
+
+        return builder;
+    }
+```
+
+You can create your own configuration using the `new ConsoleBuilder()` if you require customizations.
+
+## Dependency Injection
+
+Configuring implementations for dependency injection is simple using the `ConfigureServices()` method just like you can do in a .NET Core Web Application.
+
+Here's how you would register an Entity Framework Core `DbContext` for your console application.
+
+```csharp
+    static IConsole BuildConsoleApplication() =>
+        ConsoleBuilder.CreateDefaultBuilder()
+        .ConfigureServices((config, services) =>
+        {
+            services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("ApplicationDb"));
+        })
+        .Execute<MyProgram>()
+        .Build();
+```
+
+Now you can inject it into your `IExcutable`
+
+```csharp
+	public class MyProgram : IExecutable
+	{
+		private readonly ApplicationDbContext _applicationDbContext;
+
+		public MyProgram(ApplicationDbContext applicationDbContext)
+		{
+			_applicationDbContext = applicationDbContext;
+		}
+
+		public async Task Execute(string[] args)
+		{
+			// do something with your db
+			await _applicationDbContext.SaveChangesAsync();
+		}
+	}
+```
+
 ## Sample
 ```csharp
     class Program
