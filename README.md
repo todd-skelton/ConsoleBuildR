@@ -95,15 +95,10 @@ public static IConsoleBuilder CreateDefaultBuilder()
     var builder = new ConsoleBuilder()
         .ConfigureAppConfiguration((hostingContext, config) =>
         {
-            var projectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
             var environmentName = Environment.GetEnvironmentVariable(AspNetCoreEnvironment);
 
-            config
-                .SetBasePath(projectPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
+            config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                  .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
         })
         .ConfigureLogging((windowsServiceContext, logging) =>
         {
