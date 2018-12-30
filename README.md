@@ -85,9 +85,13 @@ public class MyProgram : IExecutable
 }
 ```
 
+## Application Settings
+
+Make sure the copy to output directory property on your `appsettings.json` is set to copy if newer or always.
+
 ## Console Builder
 
-`ConsoleBuilder.CreateDefaultBuilder()` will create a default implementation that has Microsoft's console logging, and use appsettings.json for configuration. The full method looks like this:
+`ConsoleBuilder.CreateDefaultBuilder()` will create a default implementation that has Microsoft's console logging, and use appsettings.json for configuration.
 
 ```csharp
 public static IConsoleBuilder CreateDefaultBuilder()
