@@ -1,12 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ConsoleBuildR.Internal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
-using ConsoleBuildR.Internal;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 
 namespace ConsoleBuildR
 {
