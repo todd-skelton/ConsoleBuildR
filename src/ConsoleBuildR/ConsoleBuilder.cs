@@ -6,6 +6,7 @@ using ConsoleBuildR.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace ConsoleBuildR
 {
@@ -14,7 +15,6 @@ namespace ConsoleBuildR
     /// </summary>
     public class ConsoleBuilder : IConsoleBuilder
     {
-        private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
         private readonly List<Action<ConsoleBuilderContext, IServiceCollection>> _configureServicesDelegates;
 
         private IConfiguration _config;
@@ -202,15 +202,10 @@ namespace ConsoleBuildR
             var builder = new ConsoleBuilder()
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
-                    var projectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
-                    var environmentName = Environment.GetEnvironmentVariable(AspNetCoreEnvironment);
+                    var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-                    config
-                        .SetBasePath(projectPath)
-                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true)
-                        .AddEnvironmentVariables();
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                          .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
                 })
                 .ConfigureLogging((windowsServiceContext, logging) =>
                 {
