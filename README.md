@@ -1,3 +1,5 @@
+[![](https://img.shields.io/nuget/v/ConsoleBuildR.svg)](https://www.nuget.org/packages/ConsoleBuildR)
+
 # ConsoleBuildR
 Upgrade your console application and use the same pattern as .NET Core MVC projects to configure services, logging, and use application settings.
 
