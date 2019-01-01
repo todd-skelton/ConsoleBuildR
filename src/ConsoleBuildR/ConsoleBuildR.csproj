@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -10,7 +10,7 @@
     <PackageProjectUrl>https://github.com/xKloc/ConsoleBuildR</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/xKloc/ConsoleBuildR/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/xKloc/ConsoleBuildR</RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <DocumentationFile>C:\Users\admin\Source\Repos\ConsoleBuildR\src\ConsoleBuildR\ConsoleBuildR.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

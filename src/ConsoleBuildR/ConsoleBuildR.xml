@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ConsoleBuildR</name>
+    </assembly>
+    <members>
+        <member name="T:ConsoleBuildR.ConsoleBuilder">
+            <summary>
+            A builder for <see cref="T:ConsoleBuildR.IConsole"/>
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ConsoleBuildR.ConsoleBuilder"/> class.
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.GetSetting(System.String)">
+            <summary>
+            Get the setting value from the configuration.
+            </summary>
+            <param name="key">The key of the setting to look up.</param>
+            <returns>The value the setting currently contains.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.UseSetting(System.String,System.String)">
+            <summary>
+            Add or replace a setting in the configuration.
+            </summary>
+            <param name="key">The key of the setting to add or replace.</param>
+            <param name="value">The value of the setting to add or replace.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.ConfigureServices(System.Action{ConsoleBuildR.ConsoleBuilderContext,Microsoft.Extensions.DependencyInjection.IServiceCollection})">
+            <summary>
+            Adds a delegate for configuring additional services for the console application. This may be called
+            multiple times.
+            </summary>
+            <param name="configureServices">A delegate for configuring the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.ConfigureServices(System.Action{Microsoft.Extensions.DependencyInjection.IServiceCollection})">
+            <summary>
+            Adds a delegate for configuring additional services for the console application. This may be called
+            multiple times.
+            </summary>
+            <param name="configureServices">A delegate for configuring the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.ConfigureAppConfiguration(System.Action{ConsoleBuildR.ConsoleBuilderContext,Microsoft.Extensions.Configuration.IConfigurationBuilder})">
+            <summary>
+            Adds a delegate for configuring the <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> that will construct an <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/>.
+            </summary>
+            <param name="configureDelegate">The delegate for configuring the <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder" /> that will be used to construct an <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+            <remarks>
+            The <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/> and <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> on the <see cref="T:ConsoleBuildR.ConsoleBuilderContext"/> are uninitialized at this stage.
+            The <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> is pre-populated with the settings of the <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.
+            </remarks>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.Build">
+            <summary>
+            Builds the required services and an <see cref="T:ConsoleBuildR.IConsole"/> which hosts a web application.
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilder.CreateDefaultBuilder">
+            <summary>
+              Initializes a new instance of the <see cref="T:ConsoleBuildR.ConsoleBuilder"/> class with pre-configured defaults.
+            </summary>
+            <returns>The initialized <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="P:ConsoleBuildR.ConsoleBuilderContext.Configuration">
+            <summary>
+            The <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" /> containing the merged configuration of the application and the <see cref="T:ConsoleBuildR.IConsole" />.
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilderExtensions.Execute``1(ConsoleBuildR.IConsoleBuilder)">
+            <summary>
+            Run this <see cref="T:ConsoleBuildR.IExecutable"/> when the console application starts.
+            </summary>
+            <typeparam name="TExecutable">The type of executable.</typeparam>
+            <param name="applicationBuilder">The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsole"/>.</returns>
+            <remarks>This can be called multiple times.</remarks>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilderExtensions.UseDefaultServiceProvider(ConsoleBuildR.IConsoleBuilder,System.Action{Microsoft.Extensions.DependencyInjection.ServiceProviderOptions})">
+            <summary>
+            Configures the default service provider
+            </summary>
+            <param name="applicationBuilder">The <see cref="T:ConsoleBuildR.IConsoleBuilder"/> to configure.</param>
+            <param name="configure">A callback used to configure the <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceProviderOptions"/> for the default <see cref="T:System.IServiceProvider"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilderExtensions.UseDefaultServiceProvider(ConsoleBuildR.IConsoleBuilder,System.Action{ConsoleBuildR.ConsoleBuilderContext,Microsoft.Extensions.DependencyInjection.ServiceProviderOptions})">
+            <summary>
+            Configures the default service provider
+            </summary>
+            <param name="applicationBuilder">The <see cref="T:ConsoleBuildR.IConsoleBuilder"/> to configure.</param>
+            <param name="configure">A callback used to configure the <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceProviderOptions"/> for the default <see cref="T:System.IServiceProvider"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilderExtensions.ConfigureAppConfiguration(ConsoleBuildR.IConsoleBuilder,System.Action{Microsoft.Extensions.Configuration.IConfigurationBuilder})">
+            <summary>
+            Adds a delegate for configuring the <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> that will construct an <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/>.
+            </summary>
+            <param name="applicationBuilder">The <see cref="T:ConsoleBuildR.IConsoleBuilder"/> to configure.</param>
+            <param name="configureDelegate">The delegate for configuring the <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder" /> that will be used to construct an <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+            <remarks>
+            The <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/> and <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> on the <see cref="T:ConsoleBuildR.ConsoleBuilderContext"/> are uninitialized at this stage.
+            The <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> is pre-populated with the settings of the <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.
+            </remarks>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilderExtensions.ConfigureLogging(ConsoleBuildR.IConsoleBuilder,System.Action{ConsoleBuildR.ConsoleBuilderContext,Microsoft.Extensions.Logging.ILoggingBuilder})">
+            <summary>
+            Adds a delegate for configuring the provided <see cref="T:Microsoft.Extensions.Logging.LoggerFactory"/>. This may be called multiple times.
+            </summary>
+            <param name="applicationBuilder">The <see cref="T:ConsoleBuildR.IConsoleBuilder" /> to configure.</param>
+            <param name="configureLogging">The delegate that configures the <see cref="T:Microsoft.Extensions.Logging.LoggerFactory"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.ConsoleBuilderExtensions.ConfigureLogging(ConsoleBuildR.IConsoleBuilder,System.Action{Microsoft.Extensions.Logging.ILoggingBuilder})">
+            <summary>
+            Adds a delegate for configuring the provided <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/>. This may be called multiple times.
+            </summary>
+            <param name="applicationBuilder">The <see cref="T:ConsoleBuildR.IConsoleBuilder" /> to configure.</param>
+            <param name="configureLogging">The delegate that configures the <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="T:ConsoleBuildR.IConsole">
+            <summary>
+            Represents a configured console application.
+            </summary>
+        </member>
+        <member name="P:ConsoleBuildR.IConsole.Services">
+            <summary>
+            The <see cref="T:System.IServiceProvider"/> for the service.
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.IConsole.Run(System.String[])">
+            <summary>
+            Runs all executables in the order they were registered.
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.IConsole.RunAsync(System.String[])">
+            <summary>
+            Runs all executables in parallel.
+            </summary>
+        </member>
+        <member name="T:ConsoleBuildR.IConsoleBuilder">
+            <summary>
+            A builder for <see cref="T:ConsoleBuildR.IConsole"/>.
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.IConsoleBuilder.Build">
+            <summary>
+            Builds an <see cref="T:ConsoleBuildR.IConsole"/> which hosts a web application.
+            </summary>
+        </member>
+        <member name="M:ConsoleBuildR.IConsoleBuilder.ConfigureAppConfiguration(System.Action{ConsoleBuildR.ConsoleBuilderContext,Microsoft.Extensions.Configuration.IConfigurationBuilder})">
+            <summary>
+            Adds a delegate for configuring the <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> that will construct an <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/>.
+            </summary>
+            <param name="configureDelegate">The delegate for configuring the <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder" /> that will be used to construct an <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+            <remarks>
+            The <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/> and <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> on the <see cref="T:ConsoleBuildR.ConsoleBuilderContext"/> are uninitialized at this stage.
+            The <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> is pre-populated with the settings of the <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.
+            </remarks>
+        </member>
+        <member name="M:ConsoleBuildR.IConsoleBuilder.ConfigureServices(System.Action{Microsoft.Extensions.DependencyInjection.IServiceCollection})">
+            <summary>
+            Adds a delegate for configuring additional services for the host or web application. This may be called
+            multiple times.
+            </summary>
+            <param name="configureServices">A delegate for configuring the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.IConsoleBuilder.ConfigureServices(System.Action{ConsoleBuildR.ConsoleBuilderContext,Microsoft.Extensions.DependencyInjection.IServiceCollection})">
+            <summary>
+            Adds a delegate for configuring additional services for the host or web application. This may be called
+            multiple times.
+            </summary>
+            <param name="configureServices">A delegate for configuring the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.IConsoleBuilder.GetSetting(System.String)">
+            <summary>
+            Get the setting value from the configuration.
+            </summary>
+            <param name="key">The key of the setting to look up.</param>
+            <returns>The value the setting currently contains.</returns>
+        </member>
+        <member name="M:ConsoleBuildR.IConsoleBuilder.UseSetting(System.String,System.String)">
+            <summary>
+            Add or replace a setting in the configuration.
+            </summary>
+            <param name="key">The key of the setting to add or replace.</param>
+            <param name="value">The value of the setting to add or replace.</param>
+            <returns>The <see cref="T:ConsoleBuildR.IConsoleBuilder"/>.</returns>
+        </member>
+    </members>
+</doc>
