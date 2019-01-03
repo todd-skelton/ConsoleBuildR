@@ -190,3 +190,10 @@ public class Executable2 : IExecutable
     }
 }
 ```
+`appsettings.json`
+
+```json
+{
+  "Message":  "Hello World!"
+}
+```
