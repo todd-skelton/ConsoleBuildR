@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -68,12 +67,7 @@ namespace ConsoleBuildR.Internal
             (_serviceProvider as IDisposable)?.Dispose();
         }
 
-        public void Run(string[] args)
-        {
-            RunAsync(args).GetAwaiter().GetResult();
-        }
-
-        public async Task RunAsync(string[] args)
+        public async Task Run(string[] args)
         {
             var executables = _applicationServices.GetServices<IExecutable>();
 

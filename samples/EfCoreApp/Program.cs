@@ -9,7 +9,7 @@ namespace EfCoreApp
     {
         static async Task Main(string[] args)
         {
-            await BuildConsoleApplication().RunAsync(args);
+            await BuildConsoleApplication().Run(args);
         }
 
         static IConsole BuildConsoleApplication() =>

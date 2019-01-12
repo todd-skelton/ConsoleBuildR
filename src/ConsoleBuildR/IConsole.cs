@@ -16,11 +16,6 @@ namespace ConsoleBuildR
         /// <summary>
         /// Runs registered executables.
         /// </summary>
-        void Run(string[] args);
-
-        /// <summary>
-        /// Runs registered executables.
-        /// </summary>
-        Task RunAsync(string[] args);
+        Task Run(string[] args);
     }
 }
