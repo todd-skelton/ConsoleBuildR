@@ -14,12 +14,12 @@ namespace ConsoleBuildR
         IServiceProvider Services { get; }
 
         /// <summary>
-        /// Runs all executables in the order they were registered.
+        /// Runs registered executables.
         /// </summary>
         void Run(string[] args);
 
         /// <summary>
-        /// Runs all executables in parallel.
+        /// Runs registered executables.
         /// </summary>
         Task RunAsync(string[] args);
     }

@@ -137,12 +137,12 @@
         </member>
         <member name="M:ConsoleBuildR.IConsole.Run(System.String[])">
             <summary>
-            Runs all executables in the order they were registered.
+            Runs registered executables.
             </summary>
         </member>
         <member name="M:ConsoleBuildR.IConsole.RunAsync(System.String[])">
             <summary>
-            Runs all executables in parallel.
+            Runs registered executables.
             </summary>
         </member>
         <member name="T:ConsoleBuildR.IConsoleBuilder">

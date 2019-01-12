@@ -70,18 +70,7 @@ namespace ConsoleBuildR.Internal
 
         public void Run(string[] args)
         {
-            var executables = _applicationServices.GetServices<IExecutable>();
-
-            if (executables == null || !executables.Any()) throw new ArgumentNullException("No services were registered as a IExecutable. Call Run<ExecutableClass> in the ConsoleApplicationBuilder");
-
-            var tasks = new List<Task>();
-
-            foreach (var executable in executables)
-            {
-                tasks.Add(executable.Execute(args));
-            }
-
-            Task.WhenAll(tasks).GetAwaiter().GetResult();
+            RunAsync(args).GetAwaiter().GetResult();
         }
 
         public async Task RunAsync(string[] args)
@@ -90,14 +79,10 @@ namespace ConsoleBuildR.Internal
 
             if (executables == null || !executables.Any()) throw new ArgumentNullException("No services were registered as a IExecutable. Call Run<ExecutableClass> in the ConsoleApplicationBuilder");
 
-            var tasks = new List<Task>();
-
             foreach (var executable in executables)
             {
-                tasks.Add(Task.Run(() => executable.Execute(args)));
+                await executable.Execute(args);
             }
-
-            await Task.WhenAll(tasks);
         }
     }
 }

@@ -15,13 +15,14 @@ namespace EfCoreApp
             _applicationDbContext = applicationDbContext;
         }
 
-        public Task Execute(string[] args)
+        public async Task Execute(string[] args)
         {
             foreach(var user in _applicationDbContext.Users)
             {
                 _logger.LogInformation($"Username: {user.Username}\n      Full Name:{user.FullName}");
             }
-            return Task.CompletedTask;
+
+            await Task.Delay(100);
         }
     }
 }

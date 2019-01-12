@@ -1,15 +1,15 @@
 ﻿using ConsoleBuildR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace EfCoreApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            BuildConsoleApplication().Run(args);
+            await BuildConsoleApplication().RunAsync(args);
         }
 
         static IConsole BuildConsoleApplication() =>
