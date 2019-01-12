@@ -25,9 +25,9 @@ public class MyProgram : IExecutable
 {
     public Task Execute(string[] args)
     {
-		Console.WriteLine("Hello World!");
+	Console.WriteLine("Hello World!");
 		
-		return Task.CompletedTask;
+	return Task.CompletedTask;
     }
 }
 ```
