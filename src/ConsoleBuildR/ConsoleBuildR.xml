@@ -140,11 +140,6 @@
             Runs registered executables.
             </summary>
         </member>
-        <member name="M:ConsoleBuildR.IConsole.RunAsync(System.String[])">
-            <summary>
-            Runs registered executables.
-            </summary>
-        </member>
         <member name="T:ConsoleBuildR.IConsoleBuilder">
             <summary>
             A builder for <see cref="T:ConsoleBuildR.IConsole"/>.
