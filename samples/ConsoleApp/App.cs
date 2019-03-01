@@ -16,11 +16,13 @@ namespace ConsoleApp
             _configuration = configuration;
         }
 
-        public async Task Execute(string[] args)
+        public Task Execute(string[] args)
         {
+            // get message from appsettings
             _logger.LogInformation(_configuration.GetValue<string>("Message"));
 
-            await Task.Delay(100);
+            // return delay to allow enough time for the console to log the value
+            return Task.Delay(100);
         }
     }
 }

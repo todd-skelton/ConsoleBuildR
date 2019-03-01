@@ -17,7 +17,7 @@ namespace EfCoreApp
             _applicationDbContext = applicationDbContext;
         }
 
-        public async Task Execute(string[] args)
+        public Task Execute(string[] args)
         {
             // pull users from appsettings.json
             var users = _configuration.GetSection("Users").Get<IEnumerable<User>>();
@@ -26,7 +26,7 @@ namespace EfCoreApp
             _applicationDbContext.Users.AddRange(users);
 
             // save changes
-            await _applicationDbContext.SaveChangesAsync();
+            return _applicationDbContext.SaveChangesAsync();
         }
     }
 }

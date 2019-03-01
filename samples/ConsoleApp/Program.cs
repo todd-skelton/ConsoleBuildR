@@ -5,14 +5,14 @@ namespace ConsoleApp
 {
     class Program
     {
-        static async Task Main(string[] args)
-        {
-            await BuildConsoleApplication().Run(args);
-        }   
-
-        static IConsole BuildConsoleApplication() =>
+        static Task Main(string[] args) =>
+            // create console application with default settings
             ConsoleBuilder.CreateDefaultBuilder()
+            // execute the app class on run
             .Execute<App>()
-            .Build();
+            // build the console app
+            .Build()
+            // run the app
+            .Run(args);
     }
 }

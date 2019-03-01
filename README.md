@@ -27,7 +27,7 @@ public class MyProgram : IExecutable
     {
 	Console.WriteLine("Hello World!");
 		
-	return Task.CompletedTask;
+	return Task.Delay(1000);
     }
 }
 ```
@@ -37,15 +37,11 @@ Then, change your `Program.cs` file to look like this:
 ```csharp
 class Program
 {
-    static async Task Main(string[] args)
-    {
-        await BuildConsoleApplication().Run(args);
-    }   
-
-    static IConsole BuildConsoleApplication() =>
+    static Task Main(string[] args) =>
         ConsoleBuilder.CreateDefaultBuilder()
         .Execute<MyProgram>()
-        .Build();
+        .Build()
+        .Run(args);
 }
 ```
 
@@ -58,14 +54,15 @@ Configuring implementations for dependency injection is simple using the `Config
 Here's how you would register an Entity Framework Core `DbContext` for your console application.
 
 ```csharp
-static IConsole BuildConsoleApplication() =>
+static Task Main(string[] args) =>
     ConsoleBuilder.CreateDefaultBuilder()
     .ConfigureServices((config, services) =>
     {
         services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("ApplicationDb"));
     })
     .Execute<MyProgram>()
-    .Build();
+    .Build()
+	.Run(args);
 ```
 
 Now you can inject it into your `IExcutable`
@@ -80,10 +77,10 @@ public class MyProgram : IExecutable
 		_applicationDbContext = applicationDbContext;
 	}
 
-	public async Task Execute(string[] args)
+	public Task Execute(string[] args)
 	{
 		// do something with your db
-		await _applicationDbContext.SaveChangesAsync();
+		return _applicationDbContext.SaveChangesAsync();
 	}
 }
 ```
@@ -127,15 +124,11 @@ You can create your own configuration using the `new ConsoleBuilder()` if you re
 ```csharp
 class Program
 {
-    static async Task Main(string[] args)
-    {
-        await BuildConsoleApplication().Run(args);
-    }   
-
-    static IConsole BuildConsoleApplication() =>
+    static Task Main(string[] args) =>
         ConsoleBuilder.CreateDefaultBuilder()
         .Execute<App>()
-        .Build();
+        .Build()
+        .Run(args);
 }
 
 public class App : IExecutable
@@ -149,11 +142,11 @@ public class App : IExecutable
         _configuration = configuration;
     }
 
-    public async Task Execute(string[] args)
+    public Task Execute(string[] args)
     {
         _logger.LogInformation(_configuration.GetValue<string>("Message"));
 
-        await Task.Delay(100);
+        return Task.Delay(100);
     }
 }
 ```

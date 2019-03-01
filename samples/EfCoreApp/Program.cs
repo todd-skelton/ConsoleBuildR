@@ -7,19 +7,22 @@ namespace EfCoreApp
 {
     class Program
     {
-        static async Task Main(string[] args)
-        {
-            await BuildConsoleApplication().Run(args);
-        }
-
-        static IConsole BuildConsoleApplication() =>
+        static Task Main(string[] args) =>
+            // create console application with default settings
             ConsoleBuilder.CreateDefaultBuilder()
+            // configure dependency injection
             .ConfigureServices(services =>
             {
+                // register ef core with dependency injection
                 services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("ApplicationDb"));
             })
+            // execute the add users class on run
             .Execute<AddUsersFromConfiguration>()
+            // execute the log users class on run
             .Execute<LogUsersInDatabase>()
-            .Build();
+            // build the console app
+            .Build()
+            // run the console app
+            .Run(args);
     }
 }
