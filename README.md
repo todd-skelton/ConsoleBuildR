@@ -25,9 +25,9 @@ public class MyProgram : IExecutable
 {
     public Task Execute(string[] args)
     {
-	Console.WriteLine("Hello World!");
+	    Console.WriteLine("Hello World!");
 		
-	return Task.Delay(1000);
+	    return Task.Delay(1000);
     }
 }
 ```
@@ -62,7 +62,7 @@ static Task Main(string[] args) =>
     })
     .Execute<MyProgram>()
     .Build()
-	.Run(args);
+    .Run(args);
 ```
 
 Now you can inject it into your `IExcutable`
@@ -74,7 +74,7 @@ public class MyProgram : IExecutable
 
 	public MyProgram(ApplicationDbContext applicationDbContext)
 	{
-		_applicationDbContext = applicationDbContext;
+	    _applicationDbContext = applicationDbContext;
 	}
 
 	public Task Execute(string[] args)
@@ -102,7 +102,7 @@ public static IConsoleBuilder CreateDefaultBuilder()
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
+                  .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
         })
         .ConfigureLogging((context, logging) =>
         {
